@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Soccer Analysis</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .upload-form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .upload-form input[type="file"] {
+            margin-bottom: 10px;
+        }
+
+        .video-container {
+            text-align: center;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .video-container video {
+            width: 100%;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .video-container video:hover {
+            transform: scale(1.05);
+        }
+
+        .team-names {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .team-names h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .team-names .team1 {
+            color: #007bff;
+        }
+
+        .team-names .team2 {
+            color: #dc3545;
+        }
+
+        .social-icons {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            margin-right: 10px;
+            color: #333;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Soccer Analysis</h1>
+
+        <form action="/" method="post" enctype="multipart/form-data" class="upload-form">
+            <input type="file" name="video" accept="video/*">
+            <button type="submit" class="btn btn-primary">Upload and Process</button>
+        </form>
+
+        {% if video_url %}
+        <div class="video-container">
+            <h2>Processed Video:</h2>
+            <video controls>
+                <source src="{{ video_url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="team-names">
+            <h3 class="team1">Team 1: {{ team1_name }}</h3>
+            <h3 class="team2">Team 2: {{ team2_name }}</h3>
+        </div>
+        {% endif %}
+
+        <div class="social-icons">
+            <a href="#" class="bi bi-facebook"></a>
+            <a href="#" class="bi bi-twitter"></a>
+            <a href="#" class="bi bi-instagram"></a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/bootstrap-icons@1.7.2/dist/js/bootstrap-icons.js"></script>
+</body>
+</html>

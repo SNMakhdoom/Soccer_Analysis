@@ -1,0 +1,29 @@
+/* styles.css */
+
+/* Add your custom CSS styles here */
+
+/* Example: Style the form inputs */
+form input[type="text"],
+form input[type="file"],
+form input[type="submit"] {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+/* Example: Style the form submit button */
+form input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+/* Example: Style the processed video frame */
+img {
+  max-width: 100%;
+  height: auto;
+  margin-top: 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+}
