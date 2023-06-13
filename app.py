@@ -39,6 +39,15 @@ def process_video(video_path):
         thresh = cv2.threshold(res_gray, 127, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
         thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
         contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        with open('file.txt', 'r') as file:
+            lines = file.readlines()
+
+        lines = [line.strip() for line in lines]
+
+        team1 = lines[0]
+        team2 = lines[1]
+        goals = lines[2]
+
         for c in contours:
             x, y, w, h = cv2.boundingRect(c)
             if h >= (1.5 * w):
@@ -65,6 +74,23 @@ def process_video(video_path):
                         cv2.rectangle(image, (x, y), (x + w, y + h), (0, 0, 255), 3)
                     else:
                         pass
+                
+            if((h>=1 and w>=1) and (h<=30 and w<=30)):
+                player_img = image[y:y+h,x:x+w]
+            
+                player_hsv = cv2.cvtColor(player_img,cv2.COLOR_BGR2HSV)
+                #white ball  detection
+                mask1 = cv2.inRange(player_hsv, lower_white, upper_white)
+                res1 = cv2.bitwise_and(player_img, player_img, mask=mask1)
+                res1 = cv2.cvtColor(res1,cv2.COLOR_HSV2BGR)
+                res1 = cv2.cvtColor(res1,cv2.COLOR_BGR2GRAY)
+                nzCount = cv2.countNonZero(res1)
+        
+
+                if(nzCount >= 3):
+                    # detect football
+                    cv2.putText(image, 'football', (x-2, y-2), font, 0.8, (0,255,0), 2, cv2.LINE_AA)
+                    cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),3)
 
         # Write the frame into the output video
         out.write(image)
@@ -74,9 +100,7 @@ def process_video(video_path):
     vidcap.release()
     out.release()
     cv2.destroyAllWindows()
-
-    # Return the path to the output video and team names
-    return output_video_path, 'France', 'Belgium'
+    return output_video_path, team1, team2, goals
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -86,12 +110,12 @@ def index():
         video_path = os.path.join(app.config['UPLOAD_FOLDER'], video.filename)
         video.save(video_path)
 
-        output_video_path, team1_name, team2_name = process_video(video_path)
+        output_video_path, team1_name, team2_name, goals = process_video(video_path)
         # Extract only the file name
         output_video_filename = os.path.basename(output_video_path)
 
         return render_template('index.html', video_url=url_for('static', filename=f'uploads/{output_video_filename}'),
-                               team1_name=team1_name, team2_name=team2_name)
+                               team1_name=team1_name, team2_name=team2_name, goals=goals)
 
     return render_template('index.html')
 
